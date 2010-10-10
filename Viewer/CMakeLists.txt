@@ -5,10 +5,12 @@ include(${QT_USE_FILE})
 
 set(MapViewer_SRCS
 	main.cpp
-	mainwindow.cpp)
+	mainwindow.cpp
+	scene.cpp)
 
 set(MapViewer_HDRS
-	mainwindow.h)
+	mainwindow.h
+	scene.h)
 
 set(MapViewer_UI
 	ui/mainwindow.ui)
@@ -18,3 +20,4 @@ QT4_AUTOMOC(${MapViewer_SRCS})
 
 add_executable(mapviewer ${MapViewer_SRCS} ${MapViewermoc} ${MapViewerUI})
 
+target_link_libraries(mapviewer ${QT_LIBRARIES})
