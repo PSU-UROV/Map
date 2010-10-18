@@ -1,6 +1,6 @@
-#include "volumeindexer.h"
+#include "octnode.h"
 
-VolumeIndexer::VolumeIndexer()
+OctNode::OctNode()
 	: ufl(0),
 	, ufr(0),
 	, ubl(0),
@@ -9,6 +9,10 @@ VolumeIndexer::VolumeIndexer()
 	, dfr(0),
 	, dbl(0),
 	, dbr(0)
+{
+}
+
+void OctNode::insert(Surface *surface)
 {
 }
 
