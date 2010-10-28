@@ -2,7 +2,8 @@
 #define CUBE_H
 
 #include "volume.h"
-#include "vector.h"
+#include "plane.h"
+#include "vector3.h"
 
 class Cube
 	: public Volume
@@ -11,15 +12,19 @@ class Cube
 	public:
 		Cube();
 
-		/** Two sides are nomal to the size vector
-		    and the rest are parallel.  The size
-		    vector is 1/2 the length of a side  **/
-		Cube(const Vector &center,
-		     const Vector &size);
+		/** A cube is defined by a plane and size
+		    Size can be thought of as 1/2 * width */
+		Cube(const Plane &plane,
+		     float size);
+
+		const Plane &plane() const;
+		float size() const;
+
+		bool isAxisAligned(const Cube &other) const;
 
 	private:
-		Vector m_center
-		Vector m_size;
+		Plane m_plane;
+		float m_size;
 
 };
 
