@@ -17,6 +17,8 @@ class Plane
 		const Vector3 &vect1() const;
 		const Vector3 &vect2() const;
 
+		bool isNormalTo(const Vector3 &other) const;
+
 	private:
 		const Vector3 m_vect1;
 		const Vector3 m_vect2;

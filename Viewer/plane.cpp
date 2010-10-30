@@ -33,3 +33,8 @@ const Vector3 &Plane::vect2() const
 	return m_vect2;
 }
 
+bool Plane::isNormalTo(const Vector3 &other) const
+{
+	return (!other.dotProd(m_vect1) && !other.dotProd(m_vect2))
+}
+
