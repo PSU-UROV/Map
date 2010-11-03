@@ -1,23 +1,21 @@
-#ifndef VECTOR3_H
-#define VECTOR3_H
+#ifndef VECfloatOR3F_H
+#define VECfloatOR3F_H
 
 #include <vector>
 
-class Vector3
+class Vector3f
 	: public std::vector<float>
 {
 
 	public:
-		Vector3();
-		Vector3(float x,
-		       float y,
-		       float z);
+		Vector3f();
+		Vector3f(float x,
+		         float y,
+		         float z);
 
-		float x() const;
-		float y() const;
-		float z() const;
-
-		float dotProd(const Vector3 &other) const;
+		const float &x() const;
+		const float &y() const;
+		const float &z() const;
 
 };
 
