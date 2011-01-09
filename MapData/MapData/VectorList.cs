@@ -18,22 +18,96 @@ namespace MapData
         [DataMember]
         private readonly List<Line> _surfaces = new List<Line>();
         [DataMember]
-        private bool[,] _pixelmap = new bool[100, 100];
+        private bool[,] _pixelmap;
+        [DataMember]
+        private readonly int _width;
+        [DataMember]
+        private readonly int _height;
 
         /// <summary>
-        /// empty constructor, preps the pixel map
+        /// initializes the pixel map to clear
+        /// </summary>
+        /// <param name="width">width of the pixel map</param>
+        /// <param name="height">height of the pixel map</param>
+        Map(int width, int height)
+        {
+            _pixelmap = InitializedVals(width, height);
+            _width = width;
+            _height = height;
+        }
+
+        /// <summary>
+        /// makes a default map of height 100, width 100
         /// </summary>
         Map()
+            : this(100, 100)
+        { }
+
+        /// <summary>
+        /// Clears the entire Map.
+        /// </summary>
+        public void ClearMap()
         {
+            _surfaces.Clear();
+            _pixelmap = InitializedVals(_width,_height);
+        }
+
+        private static bool[,] InitializedVals(int width, int height)
+        {
+            bool[,] toret = new bool[width,height];
             //initialize the array to true(default is false)
-            for (int xind = 0; xind < 100; xind++)
+            for (int xind = 0; xind < width; xind++)
             {
-                for (int yind = 0; yind < 100; yind++)
+                for (int yind = 0; yind < height; yind++)
                 {
-                    _pixelmap[xind, yind] = true;
+                    toret[xind, yind] = true;
                 }
             }
+            return toret;
         }
+
+
+        /// <summary>
+        /// Removes any manually added blocked out pixels
+        /// </summary>
+        public void Reinitialize()
+        {
+            _pixelmap = InitializedVals(_width, _height);
+            foreach (Line readd in _surfaces)
+            {
+                ModifyArray(readd);
+            }
+        }
+
+        /// <summary>
+        /// Marks a point on the pixel map as impassable(false)
+        /// </summary>
+        /// <param name="xcoord">xcoord of impassable terrain</param>
+        /// <param name="ycoord">ycoord of impassable terrain</param>
+        public void MakeImpassable(int xcoord, int ycoord)
+        {
+            if (xcoord > (_width - 1) || ycoord > (_height - 1))
+                throw new ArgumentException("invalid arguments, too large");
+            _pixelmap[xcoord, ycoord] = false;
+        }
+
+        /// <summary>
+        /// Marks a point on the pixel map as passable
+        /// </summary>
+        /// <param name="xcoord">xcoord of passable terrain</param>
+        /// <param name="ycoord">ycoord of passable terrain</param>
+        public void MakePassable(int xcoord, int ycoord)
+        {
+            if (xcoord > (_width - 1) || ycoord > (_height - 1))
+                throw new ArgumentException("invalid arguments, too large");
+            _pixelmap[xcoord, ycoord] = true;
+        }
+
+
+                
+
+            
+
 
         /// <summary>
         /// returns the Surfaces as a list
@@ -53,19 +127,27 @@ namespace MapData
         /// <param name="to">a point the line ends at</param>
         public void AddNewLine(Point from, Point to)
         {
+            if (from.Xval > (_width - 1) || from.Xval < 0 || from.Yval > (_height - 1) || from.Yval < 0)
+                throw new ArgumentException("from parameter out of range");
+            if (to.Xval > (_width - 1) || to.Xval < 0 || to.Yval > (_height - 1) || to.Yval < 0)
+                throw new ArgumentException("to parameter out of range");
+
             Line toadd = new Line(new Point(from.Xval, from.Yval), new Point(to.Xval, to.Yval));
             _surfaces.Add(toadd);
             ModifyArray(toadd);
         }
 
         /// <summary>
-        /// adds a new line with coordinates between 0 and 100 completely randomly
+        /// adds a new line with coordinates between width and heightcompletely randomly
         /// </summary>
+        /// <remarks>currently there is an edge case bug when the points are identical</remarks>
         public void AddNewRandomLine()
         {
+            //build a new random generator, grab a point, add it.
+            //need to check that to != from
             Random gen = new Random();
-            Point from = new Point(gen.Next(100), gen.Next(100));
-            Point to = new Point(gen.Next(100), gen.Next(100));
+            Point from = new Point(gen.Next(_width), gen.Next(_height));
+            Point to = new Point(gen.Next(_width), gen.Next(_height));
 
             this.AddNewLine(from, to);
         }
@@ -83,8 +165,19 @@ namespace MapData
             }
         }
 
+        /// <summary>
+        /// Modifies the internal array to note that the added line is impassable
+        /// </summary>
+        /// <param name="tomod">The line or surface thats impassable </param>
+        /// <remarks>THis is really dangerous... Super not referentially transparent
+        /// highyl reliant on hard side effects and no locking</remarks>
         private void ModifyArray(Line tomod)
         {
+
+            if (tomod.PointA.Xval >= _width || tomod.PointA.Xval < 0 || tomod.PointA.Yval >= _height || tomod.PointA.Yval < 0)
+                throw new ArgumentException("arguments Point a was out of range");
+            if (tomod.PointB.Xval >= _width || tomod.PointB.Xval < 0 || tomod.PointB.Yval >= _height || tomod.PointB.Yval < 0)
+                throw new ArgumentException("arguments Point b was out of range");
 
             //negate out all the surface area as impassable
             //get the initial point, negate it, get the slope,s
