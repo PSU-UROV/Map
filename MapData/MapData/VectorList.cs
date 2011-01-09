@@ -11,14 +11,18 @@ namespace MapData
     /// you can get this either as a list of vectors or as a double array of bools, true means passable, false means impassable
     /// This will eventually be serializable to JSON
     /// </summary>
+    ///<remarks>the json serializer can't handle multidimensional arrays, so that is getting spitout as a single dimension array
+    ///There is a hack throughout this to copy the entire map, this is a hack to get this to work, I will figure out a better method
+    ///once I have a server up and running(this means width and height MUST be exposed to reconstruct the original map)</remarks>
     [DataContract]
     public class Map
     {
         //the different internal representations of a map
         [DataMember]
         private readonly List<Line> _surfaces = new List<Line>();
-        [DataMember]
         private bool[,] _pixelmap;
+        [DataMember]
+        private bool[] _serializablepixelmap;
         [DataMember]
         private readonly int _width;
         [DataMember]
@@ -29,17 +33,18 @@ namespace MapData
         /// </summary>
         /// <param name="width">width of the pixel map</param>
         /// <param name="height">height of the pixel map</param>
-        Map(int width, int height)
+        public Map(int width, int height)
         {
             _pixelmap = InitializedVals(width, height);
             _width = width;
             _height = height;
+            _serializablepixelmap = InitializedValsSingle(width, height);
         }
 
         /// <summary>
         /// makes a default map of height 100, width 100
         /// </summary>
-        Map()
+        public Map()
             : this(100, 100)
         { }
 
@@ -50,6 +55,7 @@ namespace MapData
         {
             _surfaces.Clear();
             _pixelmap = InitializedVals(_width,_height);
+            _serializablepixelmap = InitializedValsSingle(this.Width, this.Height);
         }
 
         private static bool[,] InitializedVals(int width, int height)
@@ -61,6 +67,20 @@ namespace MapData
                 for (int yind = 0; yind < height; yind++)
                 {
                     toret[xind, yind] = true;
+                }
+            }
+            return toret;
+        }
+
+        private static bool[] InitializedValsSingle(int width, int height)
+        {
+            bool[] toret = new bool[width * height];
+            //initialize the array to true(default is false)
+            for (int xind = 0; xind < width; xind++)
+            {
+                for (int yind = 0; yind < height; yind++)
+                {
+                    toret[xind + yind] = true;
                 }
             }
             return toret;
@@ -89,6 +109,7 @@ namespace MapData
             if (xcoord > (_width - 1) || ycoord > (_height - 1))
                 throw new ArgumentException("invalid arguments, too large");
             _pixelmap[xcoord, ycoord] = false;
+            System.Buffer.BlockCopy(_pixelmap, 0, _serializablepixelmap, 0, _width * Height);
         }
 
         /// <summary>
@@ -101,13 +122,11 @@ namespace MapData
             if (xcoord > (_width - 1) || ycoord > (_height - 1))
                 throw new ArgumentException("invalid arguments, too large");
             _pixelmap[xcoord, ycoord] = true;
+            System.Buffer.BlockCopy(_pixelmap, 0, _serializablepixelmap, 0, _width * Height);
         }
 
 
                 
-
-            
-
 
         /// <summary>
         /// returns the Surfaces as a list
@@ -117,6 +136,40 @@ namespace MapData
             get
             {
                 return _surfaces;
+            }
+        }
+
+        /// <summary>
+        /// returns the map as an array of boolean values from 0 to 100, 0 to 100
+        /// if the value is false, the terrain is impassable, if the value is true, the terrain is
+        /// passable
+        /// </summary>
+        public bool[,] MapData
+        {
+            get
+            {
+                return _pixelmap;
+            }
+        }
+
+        /// <summary>
+        /// Returns the height of the map
+        /// </summary>
+        public int Height
+        {
+            get
+            {
+                return _height;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public int Width
+        {
+            get
+            {
+                return _width;
             }
         }
 
@@ -152,18 +205,6 @@ namespace MapData
             this.AddNewLine(from, to);
         }
 
-        /// <summary>
-        /// returns the map as an array of boolean values from 0 to 100, 0 to 100
-        /// if the value is false, the terrain is impassable, if the value is true, the terrain is
-        /// passable
-        /// </summary>
-        public bool[,] MapData
-        {
-            get
-            {
-                return _pixelmap;
-            }
-        }
 
         /// <summary>
         /// Modifies the internal array to note that the added line is impassable
@@ -234,6 +275,7 @@ namespace MapData
                     xdif = xdif - (1 * Math.Sign(xdif));
                     ydif = ydif - (decs * Math.Sign(ydif));
                 }
+                System.Buffer.BlockCopy(_pixelmap, 0, _serializablepixelmap, 0, _width * _height);
             }
         }
     }

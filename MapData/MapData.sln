@@ -3,16 +3,38 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapData", "MapData\MapData.csproj", "{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerMain", "ServerMain\ServerMain.csproj", "{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6F0A9FE6-6F91-40EA-BC26-F2753FD226DE}.Release|x86.ActiveCfg = Release|Any CPU
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Debug|x86.ActiveCfg = Debug|x86
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Debug|x86.Build.0 = Debug|x86
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Release|Any CPU.ActiveCfg = Release|x86
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Release|Mixed Platforms.Build.0 = Release|x86
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Release|x86.ActiveCfg = Release|x86
+		{FFACBCF3-2A3E-406E-8B0C-74BDCB957439}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
