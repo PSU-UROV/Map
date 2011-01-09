@@ -11,14 +11,14 @@ namespace MapData
     /// </summary>
     public struct Point
     {
-           private readonly float _xval;
-           private readonly float _yval;
+           private readonly int _xval;
+           private readonly int _yval;
            /// <summary>
            /// builds an immutable point
            /// </summary>
            /// <param name="xval">assigns the x value</param>
            /// <param name="yval">assigns the yvalue</param>
-           public Point(float xval, float yval)
+           public Point(int xval, int yval)
            {
                this._xval = xval;
                this._yval = yval;
@@ -29,7 +29,7 @@ namespace MapData
             /// <summary>
             /// returns the xValue
             /// </summary>
-           public float Xval
+           public int Xval
            {
                get
                {
@@ -40,7 +40,7 @@ namespace MapData
             /// <summary>
             /// returns the yvalue
             /// </summary>
-           public float Yval
+           public int Yval
            {
                get
                {
@@ -119,6 +119,7 @@ namespace MapData
 
             //supposedly this solves if the two lines are parallell and touch(need to run the numbers myself)
             //I suspect there is a bug if 2 lines are paralell and overlapping for part(will test and eventually correct)
+            //There may also be a bug with single points on the line
             if(denominator == 0)
                 return false;
 
