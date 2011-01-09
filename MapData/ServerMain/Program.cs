@@ -24,15 +24,20 @@ namespace ServerMain
             test.AddNewRandomLine();
             test.AddNewRandomLine();
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Map));
-            MemoryStream stream = new MemoryStream();
-            
-             serializer.WriteObject(stream, test);
-             byte[] output = stream.ToArray();
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using (StreamWriter fileoutput = new StreamWriter(@"F:\test.json"))
+                {
 
-             foreach (byte prnt in output)
-             {
-                 Console.Write((char)prnt);
-             }
+                    serializer.WriteObject(stream, test);
+                    byte[] output = stream.ToArray();
+
+                    foreach (byte print in output)
+                    {
+                        fileoutput.Write((char)print);
+                    }
+                }
+            }
 
         }
 
