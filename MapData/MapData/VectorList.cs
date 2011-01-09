@@ -122,10 +122,6 @@ namespace MapData
 
 
                     toret[(int)negate.PointA.Xval, (int)negate.PointB.Yval] = false;
-
-                    
-
-
                 }
                 return toret;
                      

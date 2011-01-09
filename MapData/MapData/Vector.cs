@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Linq;
 using System.Text;
 
@@ -9,9 +10,12 @@ namespace MapData
     /// Point is an immutable x/y value pair, initialized by the constructor
     /// This struct is designed to be interoperable simply(blittable)
     /// </summary>
+    [DataContract]
     public struct Point
     {
+           [DataMember]
            private readonly int _xval;
+           [DataMember]
            private readonly int _yval;
            /// <summary>
            /// builds an immutable point
@@ -53,9 +57,12 @@ namespace MapData
     /// a line is an immutable struct of 2 points, it has one function
     /// that tests if another line intersects this line
     /// </summary>
+    [DataContract]
     public struct Line
     {
+        [DataMember]
         private readonly Point _pointa;
+        [DataMember]
         private readonly Point _pointb;
 
         /// <summary>
