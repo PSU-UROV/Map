@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 #so...make is retarded and can't have colons in it's command parameters
 #apparently
 
