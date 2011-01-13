@@ -20,9 +20,8 @@ namespace MapData
         //the different internal representations of a map
         [DataMember]
         private readonly List<Line> _surfaces = new List<Line>();
-        private bool[,] _pixelmap;
         [DataMember]
-        private bool[] _serializablepixelmap;
+        private bool[][] _pixelmap;
         [DataMember]
         private readonly int _width;
         [DataMember]
@@ -35,10 +34,10 @@ namespace MapData
         /// <param name="height">height of the pixel map</param>
         public Map(int width, int height)
         {
-            _pixelmap = InitializedVals(width, height);
+            //_pixelmap = InitializedVals(width, height);
             _width = width;
             _height = height;
-            _serializablepixelmap = InitializedValsSingle(width, height);
+            _pixelmap = InitializedVals(width, height);
         }
 
         /// <summary>
@@ -55,32 +54,33 @@ namespace MapData
         {
             _surfaces.Clear();
             _pixelmap = InitializedVals(_width,_height);
-            _serializablepixelmap = InitializedValsSingle(this.Width, this.Height);
+            _pixelmap = InitializedVals(this.Width, this.Height);
         }
 
-        private static bool[,] InitializedVals(int width, int height)
+        /// <summary>
+        /// constructs a new pixelmap array
+        /// </summary>
+        /// <param name="width">width of the array</param>
+        /// <param name="height">height of the array</param>
+        /// <returns>a true initialized pixel map of the map</returns>
+        /// <remarks>should use an enum and should use a multi-dimensional array
+        /// but the JSON serialization library is broken</remarks>
+        private static bool[][] InitializedVals(int width, int height)
         {
-            bool[,] toret = new bool[width,height];
-            //initialize the array to true(default is false)
-            for (int xind = 0; xind < width; xind++)
+            //build the array
+            bool[][] toret = new bool[width][];
+
+            for (int i = 0; i < height; i++)
             {
-                for (int yind = 0; yind < height; yind++)
-                {
-                    toret[xind, yind] = true;
-                }
+                toret[i] = new bool[height];
             }
-            return toret;
-        }
 
-        private static bool[] InitializedValsSingle(int width, int height)
-        {
-            bool[] toret = new bool[width * height];
             //initialize the array to true(default is false)
             for (int xind = 0; xind < width; xind++)
             {
                 for (int yind = 0; yind < height; yind++)
                 {
-                    toret[xind + yind] = true;
+                    toret[xind][yind] = true;
                 }
             }
             return toret;
@@ -108,8 +108,7 @@ namespace MapData
         {
             if (xcoord > (_width - 1) || ycoord > (_height - 1))
                 throw new ArgumentException("invalid arguments, too large");
-            _pixelmap[xcoord, ycoord] = false;
-            System.Buffer.BlockCopy(_pixelmap, 0, _serializablepixelmap, 0, _width * Height);
+            _pixelmap[xcoord][ycoord] = false;
         }
 
         /// <summary>
@@ -121,8 +120,7 @@ namespace MapData
         {
             if (xcoord > (_width - 1) || ycoord > (_height - 1))
                 throw new ArgumentException("invalid arguments, too large");
-            _pixelmap[xcoord, ycoord] = true;
-            System.Buffer.BlockCopy(_pixelmap, 0, _serializablepixelmap, 0, _width * Height);
+            _pixelmap[xcoord][ycoord] = true;
         }
 
 
@@ -144,7 +142,7 @@ namespace MapData
         /// if the value is false, the terrain is impassable, if the value is true, the terrain is
         /// passable
         /// </summary>
-        public bool[,] MapData
+        public bool[][] MapData
         {
             get
             {
@@ -194,6 +192,7 @@ namespace MapData
         /// adds a new line with coordinates between width and heightcompletely randomly
         /// </summary>
         /// <remarks>currently there is an edge case bug when the points are identical</remarks>
+        //todo: bugfix...the "random points" are not random enough
         public void AddNewRandomLine()
         {
             //build a new random generator, grab a point, add it.
@@ -250,7 +249,7 @@ namespace MapData
                     //walk the negations backwards
                     for (int i = 0; i <= decs; i++)
                     {
-                        _pixelmap[init.Xval - ((decs - i) * Math.Sign(xdif)), init.Yval] = false;
+                        //_pixelmap[init.Xval - ((decs - i) * Math.Sign(xdif)), init.Yval] = false;
                     }
                     //pass the next point to start from in
                     init = new Point((init.Xval - decs), init.Yval - (1 * (Math.Sign(ydif))));
@@ -266,7 +265,7 @@ namespace MapData
 
                     for (int i = 0; i <= decs; i++)
                     {
-                        _pixelmap[init.Xval, (init.Yval - ((decs - i) * Math.Sign(ydif)))] = false;
+//                        _pixelmap[init.Xval, (init.Yval - ((decs - i) * Math.Sign(ydif)))] = false;
                     }
 
                     init = new Point((init.Xval - (1 * Math.Sign(xdif))), init.Yval - (decs * Math.Sign(ydif)));
@@ -275,7 +274,7 @@ namespace MapData
                     xdif = xdif - (1 * Math.Sign(xdif));
                     ydif = ydif - (decs * Math.Sign(ydif));
                 }
-                System.Buffer.BlockCopy(_pixelmap, 0, _serializablepixelmap, 0, _width * _height);
+//                System.Buffer.BlockCopy(_pixelmap, 0, _serializablepixelmap, 0, _width * _height);
             }
         }
     }
