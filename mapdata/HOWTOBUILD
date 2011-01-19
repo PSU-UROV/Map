@@ -1,0 +1,27 @@
+1) this is normally builtwith Mono 2.8.x. It will probably build with
+.net, however there may be unresolved library issues.
+
+As such you will need to have Mono 2.8 installed, and the rest of these
+insttruction are predicated on it being in your path
+
+2)xbuild is the command that will build the set up
+
+by default it will build the debug libraries, if you pass 
+"/property:Configureation=release" it will build release 
+libraries(trace/debug disabled, optimize enabled)
+
+3) the current build structure is root is the location of the .sln file,
+
+root/lib/debug are the debug class libraries
+root/lib/release are the release class libraries
+root/bin/debug are the debug executables 
+root/bin/release are the release  executables
+
+depending on how things work out, this may change dramatically
+
+4)cd into the /bin/debug or /bin/release depending on how you built it
+
+5)run the executable using "mono servermain.exe $PATHTOJSONFILE" 
+where $PATHTOJSONFILE is where you will put the randomly generated JSON file.
+
+NOTES: this currently has no bulletproofing so handle with care

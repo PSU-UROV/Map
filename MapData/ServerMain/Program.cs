@@ -17,7 +17,7 @@ namespace ServerMain
         /// </summary>
         //ALREADY FOUND A BUG...the add appears to be able to create lines outside of the bounds, and the
         //bulletproofing for the addline isn't up
-        static void Testing()
+        static void Testing(string path)
         {
             Map test = new Map();
             test.AddNewRandomLine();
@@ -26,7 +26,7 @@ namespace ServerMain
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Map));
             using (MemoryStream stream = new MemoryStream())
             {
-                using (StreamWriter fileoutput = new StreamWriter(@"F:\test.json"))
+                using (StreamWriter fileoutput = new StreamWriter(path+"/test.json"))
                 {
 
                     serializer.WriteObject(stream, test);
@@ -43,7 +43,9 @@ namespace ServerMain
 
         static void Main(string[] args)
         {
-            Testing();
+            //execute the test function with the parameter passed in
+            //This means the parameter should be a path to a place where you want a json file
+            Testing(args[1]);
             
             Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
