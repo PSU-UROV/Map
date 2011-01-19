@@ -45,7 +45,7 @@ namespace ServerMain
         {
             //execute the test function with the parameter passed in
             //This means the parameter should be a path to a place where you want a json file
-            Testing(args[1]);
+            Testing(args[0]);
             
             Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
